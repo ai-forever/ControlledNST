@@ -182,3 +182,4 @@ class StyleTransfer:
         img_hr = self.predict(content,style,scale_img=hr_scale,iters=hr_iters,
                                    _opt_img=prep_hr(img),**kwargs)
         return (img,img_hr)
+        

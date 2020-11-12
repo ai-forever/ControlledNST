@@ -142,3 +142,4 @@ def match_color(target_img, source_img, mode='sym', eps=1e-5):
     matched_img[matched_img>1] = 1
     matched_img[matched_img<0] = 0
     return matched_img
+    
