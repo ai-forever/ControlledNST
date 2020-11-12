@@ -13,6 +13,8 @@ from torch import optim
 import torchvision
 from torchvision import transforms
 
+from utils import *
+
 class StyleTransfer:
     """
     Creates an object of StyleTransfer class.
