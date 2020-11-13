@@ -66,7 +66,7 @@ python run.py --content <content_file> --style <style_file>
 * `--style_weights`: Style loss weights for each style layer. *Default*: `0.2 0.2 0.2 0.2 0.2`
 
 #### Using in code
-Single image prediction. `predict()` method takes a path to image, a pillow image or a numpy array and returns pillow image. You can use all the parameters above.
+Single image prediction. `predict()` method receives a path to image, a pillow image or a numpy array and returns pillow image. You can use all the parameters above.
 ```python
 from style_transfer import StyleTransfer
 from PIL import Image
