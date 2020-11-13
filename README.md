@@ -49,7 +49,7 @@ python run.py --content <content_file> --style <style_file>
 *Optional* :
 * `--output`: Filename of the output image. *Default* : `result.jpg`
 * `--iters`: The number of iterations to run. *Default* : `500`
-* `--transfer_color`: Transfer colors of the style image. *Default*: `True`
+* `--preserve_colors`: Save colors of the content image. *Default*: `False`
 * `--scale_img`: Scaling factor of the image size. *Default* : `1.0`
 * `--print_every`: The number of iterations to show info (set 0 to not show info). *Default* : `0`
 * `--content_layers`: VGG19 layers used for content loss. *Default*: `r42`

@@ -61,7 +61,7 @@ class StyleTransfer:
         img = postpb(t)
         return img
         
-    def predict_iterator(self,content,style,iters=500,transfer_color=True,scale_img=1.0,
+    def predict_iterator(self,content,style,iters=500,preserve_colors=False,scale_img=1.0,
                          print_every=0,yield_every=100,style_layers=['r11','r21','r31','r41','r51'],
                          content_layers=['r42'],style_weights=[0.2,0.2,0.2,0.2,0.2],
                          content_weights=[1],_opt_img=None):
@@ -70,11 +70,15 @@ class StyleTransfer:
         
         content_img = self.load_img(content)
         style_img = self.load_img(style)
-        if transfer_color:
+        if preserve_colors:
+            content_arr = np.array(content_img)/255
+            style_arr = np.array(style_img)/255
+            style_img = Image.fromarray((match_color(style_arr,content_arr)*255).astype(np.uint8))
+        else:
             content_arr = np.array(content_img)/255
             style_arr = np.array(style_img)/255
             content_img = Image.fromarray((match_color(content_arr,style_arr)*255).astype(np.uint8))
-        
+            
         imsize = [int(i) for i in np.array(np.array(content_img).shape[0:2])*scale_img]
         content_img = self.img2tensor(content_img,imsize)
         style_img = self.img2tensor(style_img,imsize)

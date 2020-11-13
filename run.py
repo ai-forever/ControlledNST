@@ -13,8 +13,8 @@ parser.add_argument('--output', type=str, default='result.jpg',
                     help='File path of output image')
 parser.add_argument('--iters', type=int, default=500, 
                     help='The number of iterations to run')
-parser.add_argument('--transfer_color', type=bool, default=True, 
-                    help='Transfer colors of the style image')
+parser.add_argument('--preserve_colors', type=bool, default=False, 
+                    help='Save colors of the content image')
 parser.add_argument('--scale_img', type=float, default=1.0, 
                     help='Scaling factor of the image size')
 parser.add_argument('--print_every', type=int, default=0, 
@@ -34,7 +34,7 @@ args = parser.parse_args()
 
 if __name__=='__main__':
     st = StyleTransfer()
-    img = st.predict(args.content,args.style,iters=args.iters,transfer_color=args.transfer_color,
+    img = st.predict(args.content,args.style,iters=args.iters,preserve_colors=args.preserve_colors,
                      scale_img=args.scale_img,print_every=args.print_every,content_layers=args.content_layers,
                      style_layers=args.style_layers,content_weights=args.content_weights,
                      style_weights=args.style_weights)
