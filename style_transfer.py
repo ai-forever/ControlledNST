@@ -16,10 +16,6 @@ from torchvision import transforms
 from utils import *
 
 class StyleTransfer:
-    """
-    Creates an object of StyleTransfer class.
-    Use predict or predict_hr methods to make a style transfer to image from another image.
-    """
     def __init__(self):
         self.cuda = torch.cuda.is_available()
         self.device = "cuda" if self.cuda else "cpu"
@@ -66,51 +62,23 @@ class StyleTransfer:
         return img
         
     def predict_iterator(self,content,style,iters=500,transfer_color=True,scale_img=1.0,
-                    print_every=0,yield_every=100,_opt_img=None):
-        """
-        Takes "content" and "style" images and applies style of second image to the first image.
-        This method yields images every "yield_every" iterations during the process of style transfer.
+                         print_every=0,yield_every=100,style_layers=['r11','r21','r31','r41','r51'],
+                         content_layers=['r42'],style_weights=[0.2,0.2,0.2,0.2,0.2],
+                         content_weights=[1],_opt_img=None):
+        assert scale_img > 0.0
+        assert (len(style_layers) == len(style_weights)) and (len(content_layers) == len(content_weights))
         
-        Yields images of PIL.Image type.
-
-        Required parameters:
-        --------------------
-        content : string(path to image), PIL.Image, or numpy.ndarray
-            Image to apply style
-        style : string(path to image), PIL.Image, or numpy.ndarray
-            Image to take style from
-
-        Additional parameters:
-        --------------------
-        iters : integer
-            number of iterations to produce style transfer, default 500
-        transfer_color : boolean
-            change content image colors to the style image colors, default True
-        scale_img : float
-            resize the content image size in percents, default 1.0
-        print_every: integer
-            print stats during style transfer, set 0 to disable printing, default 0
-        yield_every: integer
-            return images during style transfer, default 100
-        """
         content_img = self.load_img(content)
         style_img = self.load_img(style)
         if transfer_color:
             content_arr = np.array(content_img)/255
             style_arr = np.array(style_img)/255
             content_img = Image.fromarray((match_color(content_arr,style_arr)*255).astype(np.uint8))
-            
+        
         imsize = [int(i) for i in np.array(np.array(content_img).shape[0:2])*scale_img]
         content_img = self.img2tensor(content_img,imsize)
         style_img = self.img2tensor(style_img,imsize)
         opt_img = Variable(content_img.data.clone(), requires_grad=True)
-        
-        style_layers = ['r11','r21','r31','r41','r51'] 
-        content_layers = ['r42']
-        style_weights = [1e3/(n**2) for n in [64,128,256,512,512]]
-        content_weights = [1]
-        
-        assert (len(style_layers) == len(style_weights)) and (len(content_layers) == len(content_weights))
         
         style_targets = [gram_matrix(A).detach() for A in self.vgg(style_img, style_layers)]
         content_targets = [A.detach() for A in self.vgg(content_img, content_layers)]
@@ -146,33 +114,15 @@ class StyleTransfer:
         yield out_img
         
     def predict(self,content,style,**kwargs):
-        """
-        Takes "content" and "style" images and applies style of second image to the first image.
-        Same as predict_iterator method, but returns only one final image of PIL.Image type.\
-        """
         image = None
         for image in self.predict_iterator(content,style,**kwargs):
             pass
         return image
     
     def predict_hr(self,content,style,hr_iters=400,hr_scale=1.0,scale_img=1.0,iters=500,**kwargs):
-        """
-        Takes "content" and "style" images and applies style of second image to the first image.
-        First it makes simple style transfer, then resizes the resulting image to "hr_scale" relative to original\
-        content image scale and makes style transfer with the resulting image. That provides better image quality.\
-        Parameters the same as parameters of predict_iterator method.
-        
-        Returns a tuple of PIL images: (img, img_hr), there img - simple style transfer result and img_hr - second style transfer result
-        
-        Additional parameters:
-        --------------------
-        hr_scale : float
-            scale style transfer image secondly (relative to original content image), default 1.0
-        hr_iters : integer
-            num of iterations to produce second style transfer, default 400
-        """
         img = self.predict(content,style,scale_img=scale_img,iters=iters,**kwargs)
         content_img = self.load_img(content)
+        assert hr_scale > 0.0
         imsize_hr = [int(i*hr_scale) for i in np.array(content_img).shape[0:2]]
         prep_hr = transforms.Compose([transforms.Resize(imsize_hr),
                            transforms.ToTensor(),
@@ -184,3 +134,4 @@ class StyleTransfer:
         img_hr = self.predict(content,style,scale_img=hr_scale,iters=hr_iters,
                                    _opt_img=prep_hr(img),**kwargs)
         return (img,img_hr)
+    
