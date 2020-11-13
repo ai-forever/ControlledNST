@@ -5,14 +5,16 @@ from style_transfer import StyleTransfer
 desc = "PyTorch implementation of Neural Style Transfer with color control."
 parser = argparse.ArgumentParser(description=desc)
 
-parser.add_argument('--content', type=str, default='images/content1.jpg', 
+parser.add_argument('--content', type=str, 
                     help='Path to content image', required = True)
-parser.add_argument('--style', type=str, default='images/style1.jpg', 
+parser.add_argument('--style', type=str, 
                     help='Path to style image', required = True)
 parser.add_argument('--output', type=str, default='result.jpg', 
                     help='File path of output image')
-parser.add_argument('--iters', type=int, default=500, help='The number of iterations to run')
-parser.add_argument('--transfer_color', type=bool, default=True, help='Transfer colors of the style image')
+parser.add_argument('--iters', type=int, default=500, 
+                    help='The number of iterations to run')
+parser.add_argument('--transfer_color', type=bool, default=True, 
+                    help='Transfer colors of the style image')
 parser.add_argument('--scale_img', type=float, default=1.0, 
                     help='Scaling factor of the image size')
 parser.add_argument('--print_every', type=int, default=0, 
