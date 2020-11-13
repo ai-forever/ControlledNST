@@ -25,6 +25,14 @@ When you reduce the image size, the style becames coarser. Images from left to r
 <img src="images/tubingen-starry-night-scale04.jpg" height="192px">
 </p>
 
+Also you can control color preservation. Set `preserve_colors` True to keep original content image colors. Example: `original image`, `preserve_colors=False`, `preserve_colors=True`
+
+<p align="center">
+<img src="images/tubingen.jpg" height="192px">
+<img src="images/tubingen-starry-night-stylecolors.jpg" height="192px">
+<img src="images/tubingen-starry-night-origcolors.jpg" height="192px">
+</p>
+
 ## Requirements
 - PyTorch >=1.7.0, torchvision >=0.7.0
 - numply, matplotlib, pillow
