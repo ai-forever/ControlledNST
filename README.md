@@ -4,7 +4,7 @@ A PyTorch implementation of neural style transfer with color control described i
 * [Controlling Perceptual Factors in Neural Style Transfer](https://arxiv.org/pdf/1611.07865.pdf)
 ## Examples
 ### The Neckarfront in Tübingen, Germany
-The results were obtained with the default settings except `scale_img=0.7`.
+The results were obtained with the default settings except `scale_img=0.5`.
 *Tested on Ubuntu 18.04 and python 3.6.9*
 
 <p align="center">
@@ -17,7 +17,7 @@ The results were obtained with the default settings except `scale_img=0.7`.
 <img src="images/tubingen-mosaic.jpg" height="192px">
 </p>
 
-When you reduce the image size, the style becames coarser. Images from left to right: `original image`, `scale_img=1.0`, `scale_img=0.4`
+When you reduce the image size, the style becames more coarse. Images from left to right: `original image`, `scale_img=1.0`, `scale_img=0.4`
 
 <p align="center">
 <img src="images/tubingen.jpg" height="192px">
@@ -92,3 +92,10 @@ Parameters:
 img_hr = st.predict_hr(content,style,iters=300,scale_img=0.5,hr_scale=0.9)
 ```
 See more in example.ipynb
+
+## References
+The implementation is based on the projects:
+
+- https://github.com/leongatys/PytorchNeuralStyleTransfer
+- https://github.com/leongatys/NeuralImageSynthesis/
+- https://github.com/hwalsuklee/tensorflow-style-transfer
