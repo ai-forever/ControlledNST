@@ -8,7 +8,7 @@ parser = argparse.ArgumentParser(description=desc)
 parser.add_argument('--content', type=str, 
                     help='Path to content image', required = True)
 parser.add_argument('--style', type=str, 
-                    help='Path to style image', required = True)
+                    help='Path to style Image', required = True)
 parser.add_argument('--output', type=str, default='result.jpg', 
                     help='File path of output image')
 parser.add_argument('--iters', type=int, default=500, 
