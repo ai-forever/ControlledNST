@@ -17,7 +17,7 @@ The results were obtained with the default settings except `scale_img=0.5`.
 <img src="images/tubingen-mosaic.jpg" height="192px">
 </p>
 
-When you reduce the image size, the style becames more coarse. Images from left to right: `original image`, `scale_img=1.0`, `scale_img=0.4`
+When you reduce the image size, the style becomes more rough. Images from left to right: `original image`, `scale_img=1.0`, `scale_img=0.4`
 
 <p align="center">
 <img src="images/tubingen.jpg" height="192px">
