@@ -35,7 +35,7 @@ Also you can control color preservation. Set `preserve_colors=True` to keep orig
 
 ## Requirements
 - PyTorch >=1.7.0, torchvision >=0.7.0
-- numply, matplotlib, pillow
+- numpy, matplotlib, Pillow
 
 You can install this with the command:
 ```
@@ -66,7 +66,7 @@ python run.py --content <content_file> --style <style_file>
 * `--style_weights`: Style loss weights for each style layer. *Default*: `0.2 0.2 0.2 0.2 0.2`
 
 #### Using in code
-Single image prediction. `predict()` method receives a path to image, a pillow image or a numpy array and returns pillow image. You can use all the parameters above.
+Single image prediction. `predict()` method receives a path to image, a pillow image or a numpy array and returns pillow image. You can use all the parameters mentioned above.
 ```python
 from style_transfer import StyleTransfer
 from PIL import Image
