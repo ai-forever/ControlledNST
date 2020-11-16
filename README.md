@@ -58,7 +58,8 @@ python run.py --content <content_file> --style <style_file>
 * `--output`: Filename of the output image. *Default* : `result.jpg`
 * `--iters`: The number of iterations to run. *Default* : `500`
 * `--preserve_colors`: Save colors of the content image. *Default*: `False`
-* `--scale_img`: Scaling factor of the image size. *Default* : `1.0`
+* `--img_size`: Size of the output image (set None to match to the size of content image). *Default* : `None`. *Example* : `512` or `768 1024`
+* `--scale_img`: Scaling factor of the image size. When `img_size` is not None, the new size will be scaled. *Default* : `1.0`
 * `--print_every`: The number of iterations to show info (set 0 to not show info). *Default* : `0`
 * `--content_layers`: VGG19 layers used for content loss. *Default*: `r42`
 * `--style_layers`: VGG19 layers used for style loss. *Default*: `r11 r21 r31 r41 r51`

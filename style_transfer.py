@@ -61,7 +61,7 @@ class StyleTransfer:
         img = postpb(t)
         return img
         
-    def predict_iterator(self,content,style,iters=500,preserve_colors=False,scale_img=1.0,
+    def predict_iterator(self,content,style,iters=500,preserve_colors=False,scale_img=1.0,img_size=None,
                          print_every=0,yield_every=100,style_layers=['r11','r21','r31','r41','r51'],
                          content_layers=['r42'],style_weights=[0.2,0.2,0.2,0.2,0.2],
                          content_weights=[1],_opt_img=None):
@@ -78,8 +78,16 @@ class StyleTransfer:
             content_arr = np.array(content_img)/255
             style_arr = np.array(style_img)/255
             content_img = Image.fromarray((match_color(content_arr,style_arr)*255).astype(np.uint8))
-            
-        imsize = [int(i) for i in np.array(np.array(content_img).shape[0:2])*scale_img]
+        
+        if img_size is None:
+            imsize = [int(i) for i in np.array(content_img).shape[0:2]]
+        else:
+            assert isinstance(img_size,list) and len(img_size)<=2
+            if len(img_size)==1:
+                imsize = [img_size[0],img_size[0]]
+            else:
+                imsize = img_size
+        imsize = [int(i*scale_img) for i in imsize]
         content_img = self.img2tensor(content_img,imsize)
         style_img = self.img2tensor(style_img,imsize)
         opt_img = Variable(content_img.data.clone(), requires_grad=True)
@@ -123,11 +131,20 @@ class StyleTransfer:
             pass
         return image
     
-    def predict_hr(self,content,style,hr_iters=400,hr_scale=1.0,scale_img=1.0,iters=500,**kwargs):
-        img = self.predict(content,style,scale_img=scale_img,iters=iters,**kwargs)
+    def predict_hr(self,content,style,hr_iters=400,hr_scale=1.0,hr_img_size=None,img_size=None,
+                   scale_img=1.0,iters=500,**kwargs):
+        img = self.predict(content,style,scale_img=scale_img,img_size=img_size,iters=iters,**kwargs)
         content_img = self.load_img(content)
         assert hr_scale > 0.0
-        imsize_hr = [int(i*hr_scale) for i in np.array(content_img).shape[0:2]]
+        if hr_img_size is None:
+            imsize_hr = [int(i) for i in np.array(content_img).shape[0:2]]
+        else:
+            assert isinstance(hr_img_size,list) and len(hr_img_size)<=2
+            if len(hr_img_size)==1:
+                imsize_hr = [hr_img_size[0],hr_img_size[0]]
+            else:
+                imsize_hr = hr_img_size
+        imsize_hr = [int(i*hr_scale) for i in imsize_hr]
         prep_hr = transforms.Compose([transforms.Resize(imsize_hr),
                            transforms.ToTensor(),
                            transforms.Lambda(lambda x: x[torch.LongTensor([2,1,0])]), #turn to BGR
@@ -135,7 +152,7 @@ class StyleTransfer:
                                                 std=[1,1,1]),
                            transforms.Lambda(lambda x: x.mul_(255)),
                           ])
-        img_hr = self.predict(content,style,scale_img=hr_scale,iters=hr_iters,
+        img_hr = self.predict(content,style,scale_img=hr_scale,img_size=hr_img_size,iters=hr_iters,
                                    _opt_img=prep_hr(img),**kwargs)
         return (img,img_hr)
     
